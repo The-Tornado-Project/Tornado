@@ -15,7 +15,7 @@ class Logger(name: String) {
         println("[WARN] $NAME: $message")
     }
 
-    fun error(message: Any, code: Int) {
-        println("[ERROR] $NAME $code: $message")
+    fun error(message: Any) {
+        println("[ERROR] $NAME: $message")
     }
 }

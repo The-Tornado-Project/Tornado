@@ -11,7 +11,6 @@ A next-generation, fast and modern server software for Minecraft 🌪
 - **Developer Friendly:** Offers an extensive API and comprehensive documentation to make plugin development
   straightforward and efficient.
 - **Resource Efficient:** Optimized memory management and CPU usage to handle more players with fewer resources.
-- **Error Codes:** With the code it gives for each error, it is understood within seconds what the problem is. You can check [codes.txt](/codes.txt) for the meanings of error codes.
 
 ## Getting Started
 [Coming Soon]
