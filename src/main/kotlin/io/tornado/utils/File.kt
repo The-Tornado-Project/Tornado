@@ -5,7 +5,7 @@ import java.io.IOException
 
 class File(private val file: JFile) {
     private val logger = Logger("File")
-    private val name = file.name
+    val name = file.name
 
     fun create() {
         if (!file.exists()) {

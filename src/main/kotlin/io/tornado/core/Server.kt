@@ -2,6 +2,8 @@ package io.tornado.core
 
 import io.netty.bootstrap.ServerBootstrap
 import io.netty.channel.nio.NioEventLoopGroup
+import io.netty.channel.socket.nio.NioServerSocketChannel
+import io.tornado.network.Initializer
 import io.tornado.utils.Elapse
 import io.tornado.utils.Logger
 import kotlinx.coroutines.Dispatchers
@@ -9,10 +11,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.concurrent.atomic.AtomicBoolean
 
-class Server(port: Int) {
+class Server(port: Int, protocol: Int, version: String) {
     private val logger = Logger("Server")
 
     private val PORT: Int = port
+    private val PROTOCOL: Int = protocol
+    private val VERSION: String = version
 
     // Netty bootstrap
     private val bootstrap = ServerBootstrap()
@@ -28,6 +32,10 @@ class Server(port: Int) {
     private val startElapse = Elapse()
     private val stopElapse = Elapse()
 
+    init {
+        logger.info("Initialized server on protocol version $PROTOCOL and Minecraft version $VERSION.")
+    }
+
     fun start(): Unit = runBlocking {
         // Checking if the server is not running
         if (isRunning.compareAndSet(false, true)) {
@@ -37,7 +45,13 @@ class Server(port: Int) {
             // Using Dispatchers.IO for network operations
             launch(Dispatchers.IO) {
                 try {
-                    // TODO : Netty server startup code
+                    bootstrap
+                        .group(bossGroup, workerGroup)
+                        .channel(NioServerSocketChannel::class.java)
+                        .childHandler(Initializer())
+                        .bind(PORT)
+                        .sync()
+
 
                     startElapse.stop()
                     logger.info("Server started in ${startElapse.elapsedSeconds()}s ${startElapse.elapsedMillis()}ms")
